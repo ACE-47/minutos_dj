@@ -1,0 +1,83 @@
+{% extends 'core/base.html' %}
+
+
+{% block title %}Edit - {{project.title}}| {% endblock title %}
+
+{% block content %}
+    <div id='project-app'>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="#"> Dashboard</a></li>
+                <li><a href="{% url 'projects' %}" > Projects</a></li>
+                <li ><a href="{% url 'project-detail' project.id %}"> {{project.title}}</a></li>
+                <li class="is-active"><a href="{% url 'edit-project' project.id %}" aria-current="page"> Edit - project</a></li>
+            </ul>
+        </nav>
+
+        <div class="columns">
+            <div class="column">
+                <h1 class="title">Edit project</h1>
+            </div>
+        </div>
+
+        <div class="columns">
+            <div class="column is-4">
+                {% comment %} @submit="validateForm" {% endcomment %}
+                <form method="post" action="."  enctype="multipart/from-data" >
+                    {% csrf_token %}
+                    
+                    <div class="field">
+                        <label>Title</label>
+
+                        <div class="control">
+                            {% comment %} v-model="title" {% endcomment %}
+                            <input type="text" name="title" id="id_title" class="input" value="{{project.title}}">
+                        </div>
+                    </div>
+
+                    {% comment %} <div class="notification is-danger" v-if="errors.length">
+                        <p v-for="error in erorrs">[[error]]</p>
+                    </div> {% endcomment %}
+                    
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-success">Save changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content%}
+
+
+{% comment %} {% block script %}
+    <script>
+        const ProjectApp = {
+            data() {
+                return {
+                    title : '{{project.title}}',
+                    errors : []
+                }
+            },
+            delimiters: ['[[',']]'],
+            methods: {
+                validateForm(e) {
+                    this.errors = []
+
+                    if(this.title){
+                        return true
+                    }
+
+                    e.preventDefault()
+                    this.errors.push("the title field is missing")
+
+                    return false
+                }
+            }
+        }
+
+        Vue.createApp(ProjectApp).mount('#project-app')
+    </script>
+{% endblock script %} {% endcomment %}

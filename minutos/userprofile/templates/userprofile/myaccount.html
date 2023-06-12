@@ -1,0 +1,78 @@
+
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}My Account| {% endblock title %}
+
+{% block content %}
+
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="#"> Dashboard</a></li>
+            <li class="is-active"><a href="{% url 'my-account' %}" aria-current="page"> My Account</a></li>
+        </ul>
+    </nav>
+
+    <div class="columns">
+        <div class="column is-6">
+            <div class="media mb-4">
+                <div class="media-left">
+
+                </div>
+
+                <div class="media-content">
+                    <p class="title is-3">{% firstof user.get_full_name user.username %}</p>
+                    <p class="subtitle is-6"> {{user.email}}</p>
+                </div>
+            </div>
+            <a href="{% url 'edit-profile' %}" class="button is-info">Edit</a>
+            <a href="{% url 'logout' %}" class="button is-danger">Log Out</a>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="columns">
+        <div class="column is-12">
+            <h2 class="subtitle">Teams</h2>
+            <a href="{% url 'add-team' %}" class="button is-success">Add Team</a>
+        </div>
+    </div>
+
+
+    <div class="columns">
+        {% if active_team %}
+        <div class="column is-4">
+            <div class="notification has-background-success-light">
+                <h3 class="is-size-5">
+                    {{active_team.title}} {% if active_team.created_by == request.user %}(Owner) {% else %} (Member) {% endif %}
+                </h3>
+                <h3 class="is-size-6"> Show Plan Here</h3>
+                
+                <hr>
+
+                <a href="{% url 'team-detail' active_team.id %}" class="button is-success">Detail</a>
+                {% if active_team.created_by == request.user %}
+                    <a href="#" class="button is-info">Invite Users</a>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% endif %}
+        {% for team in teams%}
+            <div class="column is-4">
+                <div class="notification">
+                    <h3 class="is-size-5">
+                        {{team.title}} {% if team.created_by == request.user %}(Owner) {% else %} (Member) {% endif %}
+                    </h3>
+                    <h3 class="is-size-6"> Show Plan Here</h3>
+                    
+                    <hr>
+
+                    <a href="{% url 'team-detail' team.id %}" class="button is-success">Detail</a>
+                    <a href="{% url 'activate-team' team.id %}" class="button is-info">Active</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content%}

@@ -1,0 +1,71 @@
+{% extends 'core/base.html' %}
+
+
+{% block title %}Add - Team| {% endblock title %}
+
+{% block content %}
+
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="#"> Dashboard</a></li>
+            <li><a href="{% url 'my-account' %}"> My Account</a></li>
+            <li class="is-active"><a href="{% url 'add-team' %}" aria-current="page"> Add Team</a></li>
+        </ul>
+    </nav>
+
+    <div class="columns" id='team-app'>
+        <div class="column is-4">
+            <h1 class="title">Add Team</h1>
+
+            <form method="post" action="." @submit="validateForm">
+                {% csrf_token %}
+                
+                <div class="field">
+                    <label>Title</label>
+                    <div class="control">
+                        <input type="text" name="title" id="title" class="input" v-model="title">
+                    </div>
+                </div>
+                <div class="notification is-danger" v-if="errors.length">
+                    <p v-for="error in erorrs">[[error]]</p>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-success">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content%}
+
+{% block script %}
+    <script>
+        const TeamApp = {
+            data() {
+                return {
+                    title : '',
+                    errors : []
+                }
+            },
+            delimiters: ['[[',']]'],
+            methods: {
+                validateForm(e) {
+                    this.errors = []
+
+                    if(this.title){
+                        return true
+                    }
+
+                    e.preventDefault()
+                    this.errors.push("the title field is missing")
+
+                    return false
+                }
+            }
+        }
+
+        Vue.createApp(TeamApp).mount('#team-app')
+    </script>
+{% endblock script %}

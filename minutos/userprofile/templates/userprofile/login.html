@@ -1,0 +1,63 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %} Login| {% endblock title %}
+
+{% block content %}
+    
+    <section class="hero is-medium is-light is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">Login</h1>
+                <h2 class="subtitle mt-4">Create free account and start Tracking your Time</h2>
+            </div>
+        </div>
+    </section>
+
+    <div class="columns" id="signup-app">
+        <div class="column is-6 is-offset-3">
+            <form action="." method="post" class="mt-6" >
+                {% csrf_token %}
+                {% if form.errors %}
+                    <div class="notification is-danger">
+                        {{ form.non_field_errors}}
+                        
+                        {% for field in form %}
+                            {% if field.errors %}{{field.label}}: {{field.errors|striptags}}{% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                
+
+                    <div class="field">
+                        <label> E-mail</label>
+                        <div class="control">
+                            <input type="email" name="username" id="id_username" class="input" >
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label> Password</label>
+                        <div class="control">
+                            <input type="password" name="password" id="id_password" class="input" >
+                        </div>
+                    </div>
+
+                    
+
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-success mt-4">Login</button>
+                        </div>
+
+                    </div>
+            </form>
+
+            <hr>
+            <h2 class="subtitle">Don't Have an account ?</h2>
+            <a href="{% url 'signup' %}">Create for free</a>
+        </div>
+    </div>
+
+{% endblock content %}
