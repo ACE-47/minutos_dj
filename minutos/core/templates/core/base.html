@@ -25,7 +25,12 @@
                     <div class="navbar-item">
                         <div class="buttons">
                             {% if request.user.is_authenticated %}
-                                <a href="{% url 'my-account' %}" class="button is-success"><strong>{% firstof request.user.get_full_name request.user.username %}{% if active_team %} ({{active_team.title}}){% endif %}</strong></a>
+                                <a href="{% url 'my-account' %}" class="button is-success">
+                                    <span class="icon"><i class="fas fa-user"></i></span>
+                                    <span>
+                                        <strong>{% firstof request.user.get_full_name request.user.username %}{% if active_team %} ({{active_team.title}}){% endif %}</strong>
+                                    </span>
+                            </a>
                             {% else %}
                                 <a href="{% url 'signup' %}" class="button is-success"><strong>Sign Up</strong></a>
                                 <a href="{% url 'login' %}" class="button">Log In</a>
@@ -75,6 +80,7 @@
     <!-- End Of Footer -->
 
     <!-- Script -->
+    <script src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     {% block script %}{% endblock script %}
     <!-- End of Script -->

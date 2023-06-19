@@ -46,7 +46,8 @@
                     <div class="column is-4">
                         <div class="notification">
                             <h3 class="is-size-5"> {{task.title}}</h3>
-
+                            <p>Registerd Time: {{task.registerd_time}}</p>
+   
                             <hr>
 
                             <a href="{% url 'task-detail' project.id task.id%}" class="button is-success">Detail</a>
@@ -63,6 +64,7 @@
                     <div class="column is-4">
                         <div class="notification">
                             <h3 class="is-size-5"> {{task.title}}</h3>
+                            <p>Registerd Time: {{task.registerd_time}}</p>
 
                             <hr>
 

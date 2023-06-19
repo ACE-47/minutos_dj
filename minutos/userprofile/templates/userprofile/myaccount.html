@@ -16,17 +16,23 @@
     <div class="columns">
         <div class="column is-6">
             <div class="media mb-4">
-                <div class="media-left">
-
-                </div>
+                <div class="media-left"></div>
 
                 <div class="media-content">
                     <p class="title is-3">{% firstof user.get_full_name user.username %}</p>
                     <p class="subtitle is-6"> {{user.email}}</p>
                 </div>
             </div>
-            <a href="{% url 'edit-profile' %}" class="button is-info">Edit</a>
-            <a href="{% url 'logout' %}" class="button is-danger">Log Out</a>
+            <a href="{% url 'edit-profile' %}" class="button is-info">
+                <span class="icon"><i class="far fa-edit"></i></span>
+                <span>
+                    Edit Profile
+                </span>
+            </a>    
+            <a href="{% url 'logout' %}" class="button is-danger"><span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                <span>
+                    Log Out
+                </span></a>
         </div>
     </div>
 
