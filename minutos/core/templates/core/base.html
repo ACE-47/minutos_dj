@@ -20,6 +20,7 @@
                     {% if not request.user.is_authenticated %}
                         <a href="{% url 'plans' %}" class="navbar-item">Plans</a>
                     {% else %}
+                        <a href="{% url 'dashboard' %}" class="navbar-item">Dashboard</a>
                         <a href="{% url 'projects' %}" class="navbar-item">Projects</a>
                     {% endif %}
                     <div class="navbar-item">

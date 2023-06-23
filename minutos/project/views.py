@@ -90,7 +90,7 @@ def task_detail(request, project_id, task_id):
         minutes =int(request.POST.get('minutes',0))
         date = '%s %s' % (request.POST.get('date'), datetime.now().time())
         minutes_total = (hours*60) + minutes
-        entry = Entry.objects.create(team = team, task = task, project = project, minutes = minutes_total, created_at = date, created_by = request.user)
+        entry = Entry.objects.create(team = team, task = task, project = project, minutes = minutes_total, created_at = date, created_by = request.user, is_tracked = True)
 
     return render(request,'project/task_detail.html',{
         'today':datetime.today(),

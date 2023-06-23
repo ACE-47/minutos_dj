@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Dashboard |{% endblock title %}
+
+{% block content %}
+    <div class="columns is-multiline">
+        <div class="column is-6">
+            <div class="notification">
+                <h2 class="subtitle">Your Time {% if num_days is 0 %}today {% else %}{{date_user|date:"Y-m-d"}}{% endif %}</h2>
+
+                {% if date_entries %}
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <td>Task</td>
+                                <td>Project</td>
+                                <td>Team</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for entry in date_entries %}
+                                <tr>
+                                    <td>{{entry.task.title}}</td>
+                                    <td>{{entry.project.title}}</td>
+                                    <td>{{entry.minutes}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">Total</td>
+                                <td>{{time_for_user_and_date}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    {% else %}
+                    <p class="block">No Entries Today...</p>
+                {% endif %}
+                    <a href="?num_days={{ num_days|add:'1' }}" class="mt-4">Previous</a>
+                {% if num_days > 0 %}
+                    <a href="?num_days={{ num_days|add:'-1' }}" class="mt-4">Next</a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    <div class="columns is-multiline">
+        <div class="column is-12">
+            <h2 class="subtitle">Newest Projects</h2>
+        </div>
+    </div>
+
+{% endblock content %}
