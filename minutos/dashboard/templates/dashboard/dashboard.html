@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load dashboardextras %}
 
 {% block title %}Dashboard |{% endblock title %}
 
@@ -14,7 +15,7 @@
                             <tr>
                                 <td>Task</td>
                                 <td>Project</td>
-                                <td>Team</td>
+                                <td>Time</td>
                             </tr>
                         </thead>
 
@@ -23,7 +24,7 @@
                                 <tr>
                                     <td>{{entry.task.title}}</td>
                                     <td>{{entry.project.title}}</td>
-                                    <td>{{entry.minutes}}</td>
+                                    <td>{{entry.minutes|format_minutes}}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -31,26 +32,127 @@
                         <tfoot>
                             <tr>
                                 <td colspan="2">Total</td>
-                                <td>{{time_for_user_and_date}}</td>
+                                <td>{{time_for_user_and_date|format_minutes}}</td>
                             </tr>
                         </tfoot>
                     </table>
-                    {% else %}
+                {% else %}
                     <p class="block">No Entries Today...</p>
                 {% endif %}
+                
                     <a href="?num_days={{ num_days|add:'1' }}" class="mt-4">Previous</a>
                 {% if num_days > 0 %}
                     <a href="?num_days={{ num_days|add:'-1' }}" class="mt-4">Next</a>
                 {% endif %}
-
             </div>
         </div>
+
+        <div class="column is-6">
+            <div class="notification">
+                <h2 class="subtitle">Your Time {% if user_num_months is 0 %}This Month {% else %}{{user_month|date:"Y-m"}}{% endif %}</h2>
+
+                {% if time_for_user_and_month %}
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <td>Project</td>
+                            <td>Time</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for project in all_projects %}
+                            {% if project.time_for_user_and_project_and_month %}
+                                <tr>
+                                    
+                                    <td>{{project.title}}</td>
+                                    <td>{{project.time_for_user_and_project_and_month|format_minutes}}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td>Total</td>
+                            <td>{{time_for_user_and_month|format_minutes}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                {% else %}
+                <p class="block">No Entries This Month ...</p>
+                {% endif %}
+                
+                    <a href="?user_num_months={{ user_num_months|add:'1' }}" class="mt-4">Previous</a>
+                {% if user_num_months > 0 %}
+                    <a href="?user_num_months={{ user_num_months|add:'-1' }}" class="mt-4">Next</a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if request.user == team.created_by %}
+            <div class="column is-6">
+                <div class="notification">
+                    <h2 class="subtitle">Your Team {% if team_num_months is 0 %}This Month {% else %}{{team_month|date:"Y-m"}}{% endif %}</h2>
+
+                    {% if time_for_team_and_month %}
+                        <table class="table is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Time</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for member in members %}                
+                                        <tr>
+                                            
+                                            <td>{% firstof  member.get_full_name member.username  %}</td>
+                                            <td>{{member.time_for_user_team_and_and_month|format_minutes}}</td>
+                                        </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="block">No Registerd time for your team This Month ...</p>
+                    {% endif %}
+                
+                    <a href="?team_num_months={{ team_num_months|add:'1' }}" class="mt-4">Previous</a>
+                    {% if team_num_months > 0 %}
+                        <a href="?team_num_months={{ team_num_months|add:'-1' }}" class="mt-4">Next</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        
     </div>
 
     <div class="columns is-multiline">
         <div class="column is-12">
             <h2 class="subtitle">Newest Projects</h2>
         </div>
+
+        {% for project in latest_projects %}
+        <div class="column is-3">
+            <div class="notification">
+                <h2 class="is-size-5">{{project.title}}</h2>
+
+                <p class="is-size-7">Registerd Time: {{project.registerd_time|format_minutes}}</p>
+                <p class="is-size-7">Number of Tasks: {{project.num_tasks_todo}}</p>
+                
+                <hr>
+                <a href="{% url 'project-detail' project.id %}" class="button is-info">Info</a>
+            </div>
+        </div>
+
+        {% empty %}
+            <div class="column is-3">
+                <div class="notification">
+                    <p>No Projects Yet...</p>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 
 {% endblock content %}
