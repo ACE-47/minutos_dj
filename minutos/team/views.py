@@ -1,9 +1,21 @@
+# from python 
 
+import random
+
+# from django
+# 
+# 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect ,get_object_or_404
 
-from .models import Team
+# from models
+from .models import Team, Invitation
+
+
+# from utilites
+from .utilities import send_invitaion, send_invitaion_accepted
+
 # Create your views here.
 
 
@@ -60,3 +72,25 @@ def edit_team(request):
             'team':team,
         })
     
+
+def invite(request):
+    team = get_object_or_404(Team, pk = request.user.userprofile.active_team_id, status = Team.ACTIVE)
+
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        if email:
+            invitaions = Invitation.objects.filter(team = team, email = email)
+            
+            if not invitaions:
+                code = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz123456789') for i in range(4))
+
+                Invitation.objects.create(team = team, email= email, code = code)
+
+                messages.info(request, 'The user was invited')
+                send_invitaion(email, code, team)
+                return redirect('team-detail',team_id =  team.id)
+            else:
+                messages.info(request, ' the user has already been invited')
+
+    return render(request, 'team/invite.html',{'team':team})
