@@ -48,42 +48,38 @@
 {% endblock content%}
 
 {% block script %}
-    <script>
-        const InviteApp = {
-            data() {
-                return {
-                    email: '',
-                    errors: []
+<script>
+    const InviteApp = {
+        data() {
+            return {
+                email: '',
+                errors: []
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+                if (this.validateEmail(this.email)) {
+                    return true
                 }
-            },
-            delimiters: ['[[', ']]'],
-            methods: {
 
-                validateForm(e) {
-                    if (this.validateEmail(this.email)) {
-                        return true
-                    }
-    
-                    this.errors = ['The e-mail is not valid']
-    
-                    e.preventDefault()
-    
-                    return false
-                    
+                this.errors = ['The e-mail is not valid']
+
+                e.preventDefault()
+
+                return false
+            },
+            validateEmail(email) {
+                if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+                    return true
                 }
-                
-                validateEmail(email) {
-                    if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
-                        return true
-                    }
-    
-                    return false
-                }
-    
+
+                return false
             }
         }
-        
-        Vue.createApp(InviteApp).mount('#invite-app')
-    
-    </script>
+    }
+
+    Vue.createApp(InviteApp).mount('#invite-app')
+</script>
+
 {% endblock script %}
