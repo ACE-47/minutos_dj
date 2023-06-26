@@ -30,14 +30,10 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'my-account'
 LOGOUT_REDIRECT_URL = "frontpage" 
 
-ALLOWED_HOSTS = []
 
 # ..............
 # for invitaions
 # .............
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'myaccount'
-LOGOUT_REDIRECT_URL = 'frontpage'
 
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'

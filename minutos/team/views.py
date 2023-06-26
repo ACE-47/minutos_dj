@@ -24,8 +24,10 @@ from .utilities import send_invitaion, send_invitaion_accepted
 @login_required
 def team_detail(request, team_id):
     team = get_object_or_404(Team, pk = team_id, members__in = [request.user], status = Team.ACTIVE )
+    invitations = team.invitations.filter( status = Invitation.INVITED)
     return render(request, 'team/team_detail.html', {
-        'team':team
+        'team':team,
+        'invitations':invitations
     })
 
 @login_required
@@ -94,3 +96,6 @@ def invite(request):
                 messages.info(request, ' the user has already been invited')
 
     return render(request, 'team/invite.html',{'team':team})
+
+
+
