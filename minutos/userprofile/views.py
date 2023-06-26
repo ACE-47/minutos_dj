@@ -43,8 +43,10 @@ def signup(request):
 @login_required
 def myaccount(request):
     teams = request.user.teams.exclude(pk = request.user.userprofile.active_team_id)
+    invitations = Invitation.objects.filter(email = request.user.email)
     return render(request,'userprofile/myaccount.html',{
-        'teams':teams
+        'teams':teams,
+        'invitations':invitations
     })
 
 
@@ -56,6 +58,12 @@ def edit_profile(request):
         request.user.last_name = request.POST.get('last_name','')
         request.user.email = request.POST.get('email','')
         request.user.save()
+
+        if request.FILES:
+            avatar = request.FILES['avatar']
+            userprofile = request.user.userprofile
+            userprofile.avatar = avatar
+            userprofile.save()
 
         messages.info(request,'the changes was saved')
         
@@ -77,7 +85,7 @@ def accept_invitation(request):
             invitaion.save()
 
             team = invitaion.team
-            team.members.add(user = request.user)
+            team.members.add(request.user)
             team.save()
 
             userprofile = request.user.userprofile
@@ -87,9 +95,10 @@ def accept_invitation(request):
             messages.info(request, 'Invitaion Accepted')
 
             send_invitaion_accepted(team, invitaion)
-            return redirect('team-detail', team_id =team.id)
+            
+            return redirect('accept-invitation')
         else:
             messages.info(request, 'Invitaion was not found')
     
     else:
-        return render(request,'userprofile/accept_invitaion.html')
+        return render(request,'userprofile/accept_invitation.html')
