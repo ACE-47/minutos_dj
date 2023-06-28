@@ -18,7 +18,7 @@ def api_start_timer(request):
     entry = Entry.objects.create(
         minutes = 0 ,
         is_tracked = False,
-        team_id = request.user.userprofile.ative_team_id,
+        team_id = request.user.userprofile.active_team_id,
         created_by = request.user,
         created_at = datetime.now()
     )
@@ -30,11 +30,11 @@ def api_stop_timer(request):
     entry = Entry.objects.get(
         minutes = 0 ,
         is_tracked = False,
-        team_id = request.user.userprofile.ative_team_id,
+        team_id = request.user.userprofile.active_team_id,
         created_by = request.user,
     )
 
-    tracked_minutes  = int(datetime.now(timezone.utc) - entry.created_at).total_seconds()/60
+    tracked_minutes  = int((datetime.now(timezone.utc) - entry.created_at).total_seconds() / 60)
 
     if tracked_minutes <1 :
         tracked_minutes = 1
