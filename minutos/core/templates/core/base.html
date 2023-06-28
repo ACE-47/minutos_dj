@@ -61,6 +61,27 @@
                 </div>
             </div>
         </nav>
+
+        <div class="modal" :class="{'is-active': showTrackingModal}">
+            <div class="modal-background"></div>
+
+            <div class="modal-card">
+                <div class="modal-card-head">
+                    <p class="modal-card-title">Tracked time</p>
+                </div>
+
+                <div class="modal-card-body">
+                    <p>You have tracked [[ readableSeconds ]]</p>
+                </div>
+
+                <footer class="modal-card-foot">
+                    <button class="button is-primary" @click="addToTask()">Add to task</button>
+                    <button class="button is-success" @click="addLater()">Add later</button>
+                    <button class="button is-danger" @click="discardTimer()">Discard</button>
+                </footer> 
+            </div>
+        </div>
+
     </div>
     <!-- End Of Navbar -->
 
@@ -118,7 +139,7 @@
             delimiters: ['[[', ']]'],
             methods: {
                 startTimer() {
-                    fetch('/dashboard/projects/api/start_timer/', {
+                    fetch('/dashboard/projects/api/start-timer/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -138,7 +159,7 @@
                     })
                 },
                 stopTimer() {
-                    fetch('/dashboard/projects/api/stop_timer/', {
+                    fetch('/dashboard/projects/api/stop-timer/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -157,7 +178,7 @@
                     })
                 },
                 discardTimer() {
-                    fetch('/dashboard/projects/api/discard_timer/', {
+                    fetch('/dashboard/projects/api/discard-timer/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -175,7 +196,7 @@
                 },
                 addToTask() {
                     console.log('addToTask')
-                    window.location.href = '/dashboard/projects/track_entry/' + this.entryID + '/'
+                    window.location.href = '/dashboard/projects/track-entry/' + this.entryID + '/'
                 }
             },
             mounted() {

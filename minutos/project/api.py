@@ -13,7 +13,7 @@ from .models import Entry
 
 # api view
 
-def  api_start_timer(request):
+def api_start_timer(request):
     
     entry = Entry.objects.create(
         minutes = 0 ,
