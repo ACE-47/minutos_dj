@@ -185,28 +185,31 @@ def delete_untracked_entry(request, entry_id,):
 
 
 @login_required
-def tracke_entry(request, entry_id):
-    team = get_object_or_404(Team, pk=request.user.userprofile.active_team_id, status = Team.ACTIVE)
-    entry = get_object_or_404(Entry, pk=entry_id, team= team)
+def track_entry(request, entry_id):
+    team = get_object_or_404(Team, pk=request.user.userprofile.active_team_id, status=Team.ACTIVE)
+    entry = get_object_or_404(Entry, pk=entry_id, team=team)
     projects = team.projects.all()
     
     if request.method == 'POST':
+        hours = int(request.POST.get('hours', 0))
+        minutes = int(request.POST.get('minutes', 0))
         project = request.POST.get('project')
         task = request.POST.get('task')
-        minutes = int(request.POST.get('minutes',0))
-        hours = int(request.POST.get('hours',0))
-        
+
         if project and task:
             entry.project_id = project
             entry.task_id = task
             entry.minutes = (hours * 60) + minutes
+            entry.created_at = '%s %s' % (request.POST.get('date'), entry.created_at.time())
+            entry.is_tracked = True
             entry.save()
+
 
             messages.info(request,'The Time was Tracked!')
 
             return redirect('dashboard')
 
-    minutes, hours = divmod(entry.minutes,60)
+    hours, minutes = divmod(entry.minutes, 60)
 
     context = {
         'hours':hours,
@@ -216,4 +219,4 @@ def tracke_entry(request, entry_id):
         'entry':entry,
     }
 
-    return render('project/track_entry.html',context)
+    return render(request,'project/track_entry.html',context)
