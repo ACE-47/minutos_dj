@@ -108,7 +108,7 @@
                                 {% for member in members %}                
                                         <tr>
                                             
-                                            <td>{% firstof  member.get_full_name member.username  %}</td>
+                                            <td><a href="{% url 'view-user' member.id %}">{% firstof  member.get_full_name member.username  %}</a></td>
                                             <td>{{member.time_for_user_team_and_and_month|format_minutes}}</td>
                                         </tr>
                                 {% endfor %}
