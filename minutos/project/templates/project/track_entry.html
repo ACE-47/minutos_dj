@@ -39,7 +39,7 @@
                     <div class="control">
                         <div class="select">
                             <select name="task" v-model="task">
-                                <option v-for="task in tasks" v-bind:key="task.id" :value="task.id">[[ task.title ]]</option>
+                                <option v-for="task in tasks" v-bind:key="task.id" :value="task.id">{[[ task.title ]]}</option>
                             </select>
                         </div>
                     </div>
