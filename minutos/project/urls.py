@@ -10,6 +10,10 @@ urlpatterns = [
     path('<int:project_id>/<int:task_id>/edit/',views.edit_task, name='edit-task'),
     path('<int:project_id>/<int:task_id>/<int:entry_id>/edit/',views.edit_entry, name='edit-entry'),
     path('<int:project_id>/<int:task_id>/<int:entry_id>/delete/',views.delete_entry, name='delete-entry'),
+    path('delete-untracked-entry/<int:entry_id>/',views.delete_untracked_entry, name='delete-untracked-entry'),
+    path('track-entry/<int:entry_id>/',views.tracke_entry, name='track-entry'),
+
+
 
     # API
     

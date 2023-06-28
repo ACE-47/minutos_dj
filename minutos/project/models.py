@@ -68,4 +68,4 @@ class Entry(models.Model):
         if self.task:
             return '%s - %s' % (self.task.title, self.created_by)
         
-        return '%' % self.created_at
+        return '%s' % self.created_at

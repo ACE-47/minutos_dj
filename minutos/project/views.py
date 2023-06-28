@@ -166,8 +166,54 @@ def delete_entry(request, project_id, entry_id, task_id):
     team = get_object_or_404(Team, pk=request.user.userprofile.active_team_id, status = Team.ACTIVE)
     project = get_object_or_404(Project, pk = project_id, team = team)
     task =get_object_or_404(Task, pk = task_id, team = team)
-    entry = get_object_or_404(Entry, pk=entry_id, project = project, task= task, team= team)
+    entry = get_object_or_404(Entry, pk=entry_id, team= team)
 
     entry.delete()
     messages.info(request,'The Entries was removed!')
     return redirect('task-detail', project_id = project.id, task_id = task.id)
+
+
+@login_required
+def delete_untracked_entry(request, entry_id,):
+    team = get_object_or_404(Team, pk=request.user.userprofile.active_team_id, status = Team.ACTIVE)
+    entry = get_object_or_404(Entry, pk=entry_id, team= team)
+
+    entry.delete()
+    messages.info(request,'The Untracked-Entries was removed!')
+    return redirect('dashboard',)
+
+
+
+@login_required
+def tracke_entry(request, entry_id):
+    team = get_object_or_404(Team, pk=request.user.userprofile.active_team_id, status = Team.ACTIVE)
+    entry = get_object_or_404(Entry, pk=entry_id, team= team)
+    projects = team.projects.all()
+    
+    if request.method == 'POST':
+        project = request.POST.get('project')
+        task = request.POST.get('task')
+        minutes = int(request.POST.get('minutes',0))
+        hours = int(request.POST.get('hours',0))
+        
+        if project and task:
+            entry.project_id = project
+            entry.task_id = task
+            entry.minutes = (hours * 60) + minutes
+            entry.save()
+
+            messages.info(request,'The Time was Tracked!')
+
+            return redirect('dashboard')
+
+    minutes, hours = divmod(entry.minutes,60)
+
+    context = {
+        'hours':hours,
+        'minutes':minutes,
+        'projects':projects,
+        'team':team,
+        'entry':entry,
+    }
+
+    return render('project/track_entry.html',context)
